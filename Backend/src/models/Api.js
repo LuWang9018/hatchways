@@ -1,14 +1,5 @@
 const nodeFetch = require('node-fetch');
 
-Object.size = function(obj) {
-  var size = 0,
-    key;
-  for (key in obj) {
-    if (obj.hasOwnProperty(key)) size++;
-  }
-  return size;
-};
-
 //remove duplicate
 function getUnique(arr, comp) {
   const unique = arr
@@ -26,19 +17,10 @@ function getUnique(arr, comp) {
 
 async function getPosts(tags, sortBy = 'id', direction = 'asc') {
   const tagsArr = JSON.parse(tags);
-  console.log('tagsArr', tagsArr, typeof tagsArr);
-  console.log('direction', direction);
 
   let result = { posts: [] };
   for (let i = 0; i < tagsArr.length; i++) {
-    let data = await callApi(
-      'https://hatchways.io/api/assessment/blog/posts',
-      'GET',
-      {
-        params: tagsArr[i],
-      }
-    );
-
+    let data = await getData(tagsArr[i]);
     result = { posts: result.posts.concat(data.posts) };
   }
 
@@ -59,28 +41,50 @@ const callApi = async (url, method, options = {}) => {
     method: method || 'GET',
     credentials: 'include',
   };
-  if (options.headers) {
-    fetchOptions.headers = options.headers;
-  }
-  if (options.body) {
-    //console.log('body', options.body);-
-    fetchOptions.body = options.body;
-  }
-
   if (options.params) {
     url += '?tag=' + options.params;
   }
 
-  console.log(url);
   const data = await nodeFetch(url, fetchOptions).then(res => {
     if (res.status === 200) {
-      if (options.type === 'blob') return res.blob();
       return res.json();
     }
     return null;
   });
   return data;
 };
+
+//==================================================
+// Cache
+//==================================================
+var LRU = require('lru-cache'),
+  options = {
+    max: 500,
+    maxAge: 1000 * 60 * 60,
+  },
+  cache = new LRU(options);
+
+async function getData(tag) {
+  // Check if the data is in the cache
+  var data = cache.get('tags:' + tag);
+
+  // The key was not in the cache so data is undefined
+  if (!data) {
+    // Get the data from the database
+    data = await callApi(
+      'https://hatchways.io/api/assessment/blog/posts',
+      'GET',
+      {
+        params: tag,
+      }
+    );
+
+    // Store the data in the cache
+    cache.set('tags:' + tag, data);
+  }
+
+  return data;
+}
 
 module.exports = {
   callApi,

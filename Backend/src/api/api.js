@@ -1,4 +1,4 @@
-const getPosts = require('../models/Api');
+const getPosts = require('../models/Api').getPosts;
 
 //======================================ERROR CODE=====================================
 // 0: good
@@ -9,23 +9,22 @@ const getPosts = require('../models/Api');
 
 //======================================HELPERS=====================================
 function inputCheck(tags, sortBy, direction) {
-  let hasError = 0;
-
   //tags
+  if (!tags) return 2;
+
   const tagsArr = JSON.parse(tags);
 
-  if (!tags) hasError = 2;
-  if (!Array.isArray(tagsArr)) hasError = 1;
+  if (!Array.isArray(tagsArr)) return 1;
 
   //sortBy
   const acceptableFields = ['id', 'reads', 'likes', 'popularity'];
-  if (!acceptableFields.includes(sortBy)) hasError = 3;
+  if (sortBy && !acceptableFields.includes(sortBy)) return 3;
 
   //direction
   const acceptableDirection = ['asc', 'desc'];
-  if (!acceptableDirection.includes(direction)) hasError = 4;
+  if (direction && !acceptableDirection.includes(direction)) return 4;
 
-  return hasError;
+  return 0;
 }
 
 //======================================APIS=====================================

@@ -26,12 +26,6 @@ app.use(
   })
 );
 
-app.use(
-  staticCache(path.join('./', 'src'), {
-    maxAge: 365 * 24 * 60 * 60, //Add these files to caches for a year
-  })
-);
-
 apis.api(router);
 
 app.use(async (ctx, next) => {
@@ -45,8 +39,6 @@ app.use(async (ctx, next) => {
 
 app.use(router.routes());
 
-//app.listen(PORT, () => console.log('running on port ' + PORT));
-
 const __TEST__ = process.env.NODE_ENV === 'test';
 const server = __TEST__
   ? http.createServer(app.callback())
@@ -56,7 +48,6 @@ const server = __TEST__
     });
 if (!__TEST__) {
   console.log('users api server listening', { port: PORT });
-  //  initializeProducer();
 }
 
 module.exports = server;

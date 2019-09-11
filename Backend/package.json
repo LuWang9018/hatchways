@@ -20,6 +20,7 @@
     "koa-router": "^7.4.0",
     "koa-static-cache": "^5.1.2",
     "kow": "^3.2.3",
+    "lru-cache": "^5.1.1",
     "node-fetch": "^2.6.0",
     "supertest": "^3.3.0",
     "uuid": "^3.3.2"
