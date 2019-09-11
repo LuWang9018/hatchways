@@ -4,14 +4,15 @@ This backend app is written by Node.js with Koa framework. It's using Jest unit 
 
 # Available Scripts
 
-### `yarn dev`
+### `yarn`
+To get node packages
 
+### `yarn dev`
 Runs the server in the development mode.
 
 The server will reload if you make edits.  
 You will also see any errors in the console.
 
 ### `yarn test`
-
 This will run Jest tests.
 It will print the test result in the console and create a test report in ./coverage folder
