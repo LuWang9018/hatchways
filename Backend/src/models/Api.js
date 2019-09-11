@@ -1,6 +1,8 @@
 const nodeFetch = require('node-fetch');
 
-//remove duplicate
+//==================================================
+//Helpers
+//==================================================
 function getUnique(arr, comp) {
   const unique = arr
     .map(e => e[comp])
@@ -36,6 +38,9 @@ async function getPosts(tags, sortBy = 'id', direction = 'asc') {
   return result;
 }
 
+//==================================================
+//Api
+//==================================================
 const callApi = async (url, method, options = {}) => {
   const fetchOptions = {
     method: method || 'GET',

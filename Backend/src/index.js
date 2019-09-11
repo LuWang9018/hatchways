@@ -39,6 +39,7 @@ app.use(async (ctx, next) => {
 
 app.use(router.routes());
 
+//for test use
 const __TEST__ = process.env.NODE_ENV === 'test';
 const server = __TEST__
   ? http.createServer(app.callback())

@@ -3,11 +3,13 @@ const getPosts = require('../models/Api').getPosts;
 //======================================ERROR CODE=====================================
 // 0: good
 // 1: tag is not array
-// 2: "Tags parameter is required
+// 2: Tags parameter is required
 // 3: sortBy parameter is invalid
 // 4: direction parameter is invalid
 
-//======================================HELPERS=====================================
+//==================================================
+//Helpers
+//==================================================
 function inputCheck(tags, sortBy, direction) {
   //tags
   if (!tags) return 2;
@@ -27,7 +29,9 @@ function inputCheck(tags, sortBy, direction) {
   return 0;
 }
 
-//======================================APIS=====================================
+//==================================================
+//API
+//==================================================
 async function ping(ctx, next) {
   const result = {
     success: true,
