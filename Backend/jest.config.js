@@ -4,5 +4,5 @@ module.exports = {
 
   verbose: true,
   testEnvironment: 'node',
-  moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
+  moduleFileExtensions: ['js', 'json','mjs', 'jsx', 'ts', 'tsx', 'node'],
 };

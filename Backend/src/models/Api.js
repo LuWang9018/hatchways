@@ -24,7 +24,7 @@ function getUnique(arr, comp) {
   return unique;
 }
 
-export async function getPosts(tags, sortBy = 'id', direction = 'asc') {
+async function getPosts(tags, sortBy = 'id', direction = 'asc') {
   const tagsArr = JSON.parse(tags);
   console.log('tagsArr', tagsArr, typeof tagsArr);
   console.log('direction', direction);
@@ -54,7 +54,7 @@ export async function getPosts(tags, sortBy = 'id', direction = 'asc') {
   return result;
 }
 
-export const callApi = async (url, method, options = {}) => {
+const callApi = async (url, method, options = {}) => {
   const fetchOptions = {
     method: method || 'GET',
     credentials: 'include',
@@ -80,4 +80,9 @@ export const callApi = async (url, method, options = {}) => {
     return null;
   });
   return data;
+};
+
+module.exports = {
+  callApi,
+  getPosts,
 };

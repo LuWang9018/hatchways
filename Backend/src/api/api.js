@@ -90,4 +90,6 @@ const api = router => {
   router.get('/api/posts', posts, outputResult);
 };
 
-export default api;
+module.exports = {
+  api,
+};

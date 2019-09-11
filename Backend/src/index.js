@@ -7,8 +7,9 @@ const koaBody = require('koa-body');
 const apis = require('./api/api');
 const staticCache = require('koa-static-cache');
 const path = require('path');
+const http = require('http');
 
-const PORT = 1234;
+const PORT = 3060;
 const app = new Koa();
 const router = new Router();
 
@@ -44,16 +45,18 @@ app.use(async (ctx, next) => {
 
 app.use(router.routes());
 
-app.listen(PORT, () => console.log('running on port ' + PORT));
+//app.listen(PORT, () => console.log('running on port ' + PORT));
 
+const __TEST__ = process.env.NODE_ENV === 'test';
 const server = __TEST__
   ? http.createServer(app.callback())
-  : app.listen(port).on('error', err => {
-      conf.log.error(err);
+  : app.listen(PORT).on('error', err => {
+      console.log(PORT);
+      console.error(err);
     });
 if (!__TEST__) {
-  conf.log.verbose('users api server listening', { port });
-  initializeProducer();
+  console.log('users api server listening', { port: PORT });
+  //  initializeProducer();
 }
 
-export default server;
+module.exports = server;
