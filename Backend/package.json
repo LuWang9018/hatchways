@@ -5,8 +5,8 @@
   "main": "src/index.mjs",
   "scripts": {
     "test": "jest --coverage",
-    "dev": "nodemon --experimental-modules src/index.mjs",
-    "server": "node --experimental-modules src/index.mjs"
+    "dev": "nodemon src/index.mjs",
+    "server": "node src/index.mjs"
   },
   "author": "Lu",
   "license": "ISC",

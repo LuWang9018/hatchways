@@ -1,4 +1,4 @@
-import { getPosts } from '../models/Api';
+const getPosts = require('../models/Api');
 
 //======================================ERROR CODE=====================================
 // 0: good
@@ -90,4 +90,4 @@ const api = router => {
   router.get('/api/posts', posts, outputResult);
 };
 
-export default { api };
+export default api;

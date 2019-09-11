@@ -1,12 +1,12 @@
 'use strict';
-import Koa from 'koa';
-import Router from 'koa-router';
-import logger from 'koa-logger';
-import koaBody from 'koa-body';
+const Koa = require('koa');
+const Router = require('koa-router');
+const logger = require('koa-logger');
+const koaBody = require('koa-body');
 
-import apis from './api/api';
-import staticCache from 'koa-static-cache';
-import path from 'path';
+const apis = require('./api/api');
+const staticCache = require('koa-static-cache');
+const path = require('path');
 
 const PORT = 1234;
 const app = new Koa();

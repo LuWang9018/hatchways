@@ -1,6 +1,6 @@
-import request from 'supertest';
+const request = require('supertest');
 
-import server from '../../src/index.mjs';
+const server = require('../../src/index');
 
 describe('Ping', () => {
   const agent = request.agent(server);

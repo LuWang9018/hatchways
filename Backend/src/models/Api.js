@@ -1,4 +1,4 @@
-import nodeFetch from 'node-fetch';
+const nodeFetch = require('node-fetch');
 
 Object.size = function(obj) {
   var size = 0,
