@@ -38,5 +38,7 @@ export const callApi = async (url, method, options = {}) => {
     }
     return null;
   });
+
+  console.log('data', data);
   return data;
 };

@@ -1,5 +1,3 @@
-import uuid from 'uuid';
-
 import { LOAD_WORKERS } from '../actionTypes';
 
 const initialState = {

@@ -11,12 +11,12 @@ import { connect } from 'react-redux';
 import { loadWorks, loadWorkers } from '../../redux/actions';
 
 export class WorkList extends Component {
-  constructor() {
-    workers = await  
-    loadWorks();
-    loadWorkers();
+  async componentDidMount(props) {
+    if (!this.state || !this.state.works) {
+      this.props.loadWorks({});
+      this.props.loadWorkers({});
+    }
   }
-
   render() {
     const { works } = this.props;
     if (!works) return null;
@@ -36,7 +36,7 @@ export class WorkList extends Component {
                   accessibilityLabel={`View details for ${name}`}
                   onClick={() => this.props.changeEditState(true, works)}
                 >
-                  <div id="itemListInfo"></div>
+                  <div id='itemListInfo'></div>
                 </ResourceList.Item>
               );
             }}

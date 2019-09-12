@@ -13,41 +13,28 @@ import {
   Page,
   SkeletonPage,
 } from '@shopify/polaris';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { MyTopBar } from '../SubContainers/topBar';
-import { WorkList } from './workList';
+import WorkList from './workList';
 import { theme } from '../../utils/globals';
 
 class Home extends React.Component {
-  static contextTypes = {
-    router: PropTypes.object,
-    store: PropTypes.object,
-  };
-
-  constructor(props, context) {
+  constructor(props) {
     super(props);
 
-    this.store = context.store;
-
     this.state = {
-      showToast: false,
       isLoading: false,
-      searchActive: false,
-      userMenuOpen: false,
-      showMobileNavigation: false,
-      modalActive: false,
     };
   }
 
   componentDidUpdate(prevProps) {
-    //if no user info
     if (this.props !== prevProps && this.store) {
       //console.log('Home update');
       const userInfo = this.store.getState().users.user;
-      //console.log(userInfo);
+      console.log('componentDidUpdate', this.props);
       this.setState({
         userInfo: userInfo,
+        isLoading: false,
       });
     }
   }
@@ -61,7 +48,7 @@ class Home extends React.Component {
     const loadingMarkup = isLoading ? <Loading /> : null;
 
     const actualPageMarkup = (
-      <Page title="Works">
+      <Page title='Works'>
         <WorkList></WorkList>
       </Page>
     );
@@ -72,7 +59,7 @@ class Home extends React.Component {
           <Layout.Section>
             <Card sectioned>
               <TextContainer>
-                <SkeletonDisplayText size="small" />
+                <SkeletonDisplayText size='small' />
                 <SkeletonBodyText lines={9} />
               </TextContainer>
             </Card>

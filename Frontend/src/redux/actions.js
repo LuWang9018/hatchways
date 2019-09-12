@@ -5,7 +5,7 @@ export const loadWorks = works => ({
   payload: works,
 });
 
-export const loadWorker = workers => ({
+export const loadWorkers = workers => ({
   type: LOAD_WORKERS,
   payload: workers,
 });
