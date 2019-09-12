@@ -6,6 +6,8 @@
  *
  */
 
+import fetch from 'node-fetch';
+
 function buildQuery(params) {
   return (
     '?' +
