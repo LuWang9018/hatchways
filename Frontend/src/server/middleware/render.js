@@ -43,6 +43,8 @@ function getCSS(clientStats) {
 }
 
 let works;
+let workers = [];
+let workerIds = [];
 let store;
 
 async function render({ clientStats, serverStats }) {
@@ -54,14 +56,27 @@ async function render({ clientStats, serverStats }) {
             'https://www.hatchways.io/api/assessment/work_orders',
             'GET'
         );
-        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~fetch');
+        works = works.orders;
+        works.sort((a, b) => (a.deadline > b.deadline ? 1 : -1));
+
+        for (let i = 0; i < works.length; i++) {
+            const workerId = works[i].workerId;
+            if (!workerIds.includes(workerId)) {
+                workerIds.push(workerId);
+
+                let wokerData = await callApi(
+                    `https://www.hatchways.io/api/assessment/workers/${workerId}`,
+                    'GET'
+                );
+
+                workers.push(wokerData);
+            }
+        }
     }
 
+    const initialState = { works, workers };
     if (!store) {
-        const initialState = { works: works.orders, workers: [] };
-
-        store = await createStore(rootReducer, initialState);
-        console.log('==================initialState', initialState);
+        store = await createStore(rootReducer);
     }
     // TODO: FETCH WORKS AND PASS IT TO SERVER STATS AND DISPATCH ACTION TO SET IT ON SERVER SIDE AND PASS TO CLIENT
 
@@ -85,6 +100,9 @@ async function render({ clientStats, serverStats }) {
         '<link rel="manifest" href="/manifest.json">' +
         '<link rel="shortcut icon" href="/favicon.ico">' +
         '<title>React App</title>' +
+        `<script> window.__PRELOADED_STATE__ = ${JSON.stringify(
+            initialState
+        )}</script>` +
         css +
         '</head>' +
         '<body>' +

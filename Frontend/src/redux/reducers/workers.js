@@ -1,20 +1,12 @@
-import { LOAD_WORKERS } from '../actionTypes';
+//import { LOAD_WORKERS } from '../actionTypes';
 
 const initialState = {
-  works: [],
+    workers: [],
 };
 
 export default function(state = initialState, action) {
-  switch (action.type) {
-    case LOAD_WORKERS: {
-      const works = action.payload;
-
-      return {
-        ...state,
-        //works: [...state.books, book],
-      };
+    switch (action.type) {
+        default:
+            return state;
     }
-    default:
-      return state;
-  }
 }
