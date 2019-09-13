@@ -42,42 +42,38 @@ function getCSS(clientStats) {
     );
 }
 
-let works;
-let workers = [];
-let workerIds = [];
-let store;
-
 async function render({ clientStats, serverStats }) {
     const css = getCSS(clientStats).join('');
     const context = {};
 
-    if (!works) {
-        works = await callApi(
-            'https://www.hatchways.io/api/assessment/work_orders',
-            'GET'
-        );
-        works = works.orders;
-        works.sort((a, b) => (a.deadline > b.deadline ? 1 : -1));
+    let works = await callApi(
+        'https://www.hatchways.io/api/assessment/work_orders',
+        'GET'
+    );
+    works = works.orders;
+    works.sort((a, b) => (a.deadline > b.deadline ? 1 : -1));
 
-        for (let i = 0; i < works.length; i++) {
-            const workerId = works[i].workerId;
-            if (!workerIds.includes(workerId)) {
-                workerIds.push(workerId);
+    let workers = [];
+    let workerIds = [];
 
-                let wokerData = await callApi(
-                    `https://www.hatchways.io/api/assessment/workers/${workerId}`,
-                    'GET'
-                );
+    for (let i = 0; i < works.length; i++) {
+        const workerId = works[i].workerId;
+        if (!workerIds.includes(workerId)) {
+            workerIds.push(workerId);
 
-                workers.push(wokerData);
-            }
+            let wokerData = await callApi(
+                `https://www.hatchways.io/api/assessment/workers/${workerId}`,
+                'GET'
+            );
+
+            workers.push(wokerData);
         }
     }
 
     const initialState = { works, workers };
-    if (!store) {
-        store = await createStore(rootReducer);
-    }
+
+    let store = await createStore(rootReducer);
+
     // TODO: FETCH WORKS AND PASS IT TO SERVER STATS AND DISPATCH ACTION TO SET IT ON SERVER SIDE AND PASS TO CLIENT
 
     const html = renderToString(

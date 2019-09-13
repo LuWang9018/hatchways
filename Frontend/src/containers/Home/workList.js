@@ -21,14 +21,6 @@ function isEmpty(value) {
         return value === '' || value == null;
     }
 }
-function disambiguateLabel(key, value) {
-    switch (key) {
-        case 'taggedWith':
-            return `Tagged with ${value}`;
-        default:
-            return value;
-    }
-}
 
 export class WorkList extends Component {
     state = {
@@ -57,42 +49,21 @@ export class WorkList extends Component {
         this.setState({ works: tmpworks });
     };
 
+    handleChange = key => value => {
+        this.setState({ [key]: value });
+    };
+
     render() {
         const { works } = this.props;
         const { taggedWith, queryValue } = this.state;
         if (!works) return null;
 
-        const filters = [
-            {
-                key: 'taggedWith',
-                label: 'Tagged with',
-                filter: (
-                    <TextField
-                        label="Tagged with"
-                        value={taggedWith}
-                        onChange={this.handleChange('taggedWith')}
-                        labelHidden
-                    />
-                ),
-                shortcut: true,
-            },
-        ];
-
-        const appliedFilters = Object.keys(this.state)
-            .filter(key => !isEmpty(this.state[key]) && key === 'taggedWith')
-            .map(key => {
-                return {
-                    key,
-                    label: disambiguateLabel(key, this.state[key]),
-                    onRemove: this.handleRemove,
-                };
-            });
+        const filters = [];
 
         const filterControl = (
             <Filters
                 queryValue={queryValue}
                 filters={filters}
-                appliedFilters={appliedFilters}
                 onQueryChange={this.handleChange('queryValue')}
                 onQueryClear={this.handleQueryClear}
                 onClearAll={this.handleClearAll}
