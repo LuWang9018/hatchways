@@ -98,7 +98,7 @@ class Home extends React.Component {
                 <AppProvider theme={theme}>
                     <Frame topBar={this.topBarMarkup()}>
                         {this.loadingMarkup()}
-                        {this.pageMarkup}
+                        {this.pageMarkup()}
                     </Frame>
                 </AppProvider>
             </div>
