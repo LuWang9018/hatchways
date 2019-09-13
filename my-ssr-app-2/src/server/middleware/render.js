@@ -42,19 +42,29 @@ function getCSS(clientStats) {
     );
 }
 
+let works;
+let store;
+
 async function render({ clientStats, serverStats }) {
     const css = getCSS(clientStats).join('');
-    const store = createStore(rootReducer);
     const context = {};
 
-    let works = '123';
-    // const works = await callApi(
-    //     'https://www.hatchways.io/api/assessment/work_orders',
-    //     'GET'
-    // );
+    if (!works) {
+        works = await callApi(
+            'https://www.hatchways.io/api/assessment/work_orders',
+            'GET'
+        );
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~fetch');
+    }
+
+    if (!store) {
+        const initialState = { works: works.orders, workers: [] };
+
+        store = await createStore(rootReducer, initialState);
+        console.log('==================initialState', initialState);
+    }
     // TODO: FETCH WORKS AND PASS IT TO SERVER STATS AND DISPATCH ACTION TO SET IT ON SERVER SIDE AND PASS TO CLIENT
 
-    console.log('==================works', works);
     const html = renderToString(
         <Provider store={store}>
             <StaticRouter context={context}>
