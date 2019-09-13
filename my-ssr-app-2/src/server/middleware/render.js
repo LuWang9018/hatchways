@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import '@shopify/polaris/styles.css';
 import { createStore } from 'redux';
 import rootReducer from 'redux/reducers';
-
+import { callApi } from '../../utils/requests';
 function escapeAttr(s) {
     return s && s.replace('"', '&quot;');
 }
@@ -46,7 +46,15 @@ async function render({ clientStats, serverStats }) {
     const css = getCSS(clientStats).join('');
     const store = createStore(rootReducer);
     const context = {};
+
+    let works = '123';
+    // const works = await callApi(
+    //     'https://www.hatchways.io/api/assessment/work_orders',
+    //     'GET'
+    // );
     // TODO: FETCH WORKS AND PASS IT TO SERVER STATS AND DISPATCH ACTION TO SET IT ON SERVER SIDE AND PASS TO CLIENT
+
+    console.log('==================works', works);
     const html = renderToString(
         <Provider store={store}>
             <StaticRouter context={context}>

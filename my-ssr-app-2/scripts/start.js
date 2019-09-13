@@ -19,9 +19,10 @@ require('../config/env');
 
 const _ = require('lodash');
 const chalk = require('chalk');
-const choosePort = DEV ? require('react-dev-utils/WebpackDevServerUtils').choosePort : (host, port) => Promise.resolve(port);
+const choosePort = DEV
+  ? require('react-dev-utils/WebpackDevServerUtils').choosePort
+  : (host, port) => Promise.resolve(port);
 const createServer = DEV ? require('./server.dev') : require('./server.prod');
-
 
 // Tools like Cloud9 rely on this.
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
