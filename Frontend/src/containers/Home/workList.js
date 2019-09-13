@@ -6,13 +6,34 @@ import {
     DisplayText,
     Heading,
     TextContainer,
+    TextField,
+    Filters,
+    Button,
 } from '@shopify/polaris';
 import { connect } from 'react-redux';
 import { WorkerInfo } from './workerInfo';
 import moment from 'moment';
 
+function isEmpty(value) {
+    if (Array.isArray(value)) {
+        return value.length === 0;
+    } else {
+        return value === '' || value == null;
+    }
+}
+function disambiguateLabel(key, value) {
+    switch (key) {
+        case 'taggedWith':
+            return `Tagged with ${value}`;
+        default:
+            return value;
+    }
+}
+
 export class WorkList extends Component {
     state = {
+        taggedWith: 'VIP',
+        queryValue: null,
         sortValue: 'DATE_MODIFIED_DESC',
         works: this.props.works,
         wokers: this.props.wokers,
@@ -38,7 +59,52 @@ export class WorkList extends Component {
 
     render() {
         const { works } = this.props;
+        const { taggedWith, queryValue } = this.state;
         if (!works) return null;
+
+        const filters = [
+            {
+                key: 'taggedWith',
+                label: 'Tagged with',
+                filter: (
+                    <TextField
+                        label="Tagged with"
+                        value={taggedWith}
+                        onChange={this.handleChange('taggedWith')}
+                        labelHidden
+                    />
+                ),
+                shortcut: true,
+            },
+        ];
+
+        const appliedFilters = Object.keys(this.state)
+            .filter(key => !isEmpty(this.state[key]) && key === 'taggedWith')
+            .map(key => {
+                return {
+                    key,
+                    label: disambiguateLabel(key, this.state[key]),
+                    onRemove: this.handleRemove,
+                };
+            });
+
+        const filterControl = (
+            <Filters
+                queryValue={queryValue}
+                filters={filters}
+                appliedFilters={appliedFilters}
+                onQueryChange={this.handleChange('queryValue')}
+                onQueryClear={this.handleQueryClear}
+                onClearAll={this.handleClearAll}
+            >
+                <div style={{ paddingLeft: '8px' }}>
+                    <Button onClick={() => console.log('New filter saved')}>
+                        Save
+                    </Button>
+                </div>
+            </Filters>
+        );
+
         return (
             <div style={{ maxWidth: '800px' }}>
                 <Card sectioned>
@@ -63,6 +129,7 @@ export class WorkList extends Component {
                             this.setState({ sortValue: selected });
                             this.handleSortChange(selected);
                         }}
+                        filterControl={filterControl}
                         renderItem={item => {
                             const {
                                 id,
