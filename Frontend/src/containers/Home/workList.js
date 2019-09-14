@@ -14,17 +14,8 @@ import { connect } from 'react-redux';
 import { WorkerInfo } from './workerInfo';
 import moment from 'moment';
 
-function isEmpty(value) {
-    if (Array.isArray(value)) {
-        return value.length === 0;
-    } else {
-        return value === '' || value == null;
-    }
-}
-
 export class WorkList extends Component {
     state = {
-        taggedWith: 'VIP',
         queryValue: null,
         sortValue: 'DATE_MODIFIED_DESC',
         works: this.props.works,
@@ -49,31 +40,46 @@ export class WorkList extends Component {
         this.setState({ works: tmpworks });
     };
 
-    handleChange = key => value => {
-        this.setState({ [key]: value });
+    handleChange = key => async value => {
+        await this.setState({ queryValue: value });
     };
+
+    applyFilter(works) {
+        const name = this.state.queryValue;
+
+        if (!name || name === '') return works;
+        const result = [];
+        for (let i = 0; i < works.length; i++) {
+            let tmpId = works[i].workerId;
+
+            const woker = this.props.wokers.find(function(element) {
+                return (
+                    element.worker.id === tmpId &&
+                    element.worker.name.includes(name)
+                );
+            });
+            if (woker) result.push(works[i]);
+        }
+        return result;
+    }
 
     render() {
         const { works } = this.props;
-        const { taggedWith, queryValue } = this.state;
+        const { queryValue } = this.state;
         if (!works) return null;
 
         const filters = [];
-
+        const worksAfter = this.applyFilter(works);
+        const appliedFilters = [];
         const filterControl = (
             <Filters
                 queryValue={queryValue}
                 filters={filters}
+                appliedFilters={appliedFilters}
                 onQueryChange={this.handleChange('queryValue')}
                 onQueryClear={this.handleQueryClear}
                 onClearAll={this.handleClearAll}
-            >
-                <div style={{ paddingLeft: '8px' }}>
-                    <Button onClick={() => console.log('New filter saved')}>
-                        Save
-                    </Button>
-                </div>
-            </Filters>
+            ></Filters>
         );
 
         return (
@@ -84,7 +90,7 @@ export class WorkList extends Component {
                             singular: 'work',
                             plural: 'works',
                         }}
-                        items={works}
+                        items={worksAfter}
                         sortValue={this.state.sortValue}
                         sortOptions={[
                             {
@@ -115,10 +121,10 @@ export class WorkList extends Component {
                                     id={id}
                                     accessibilityLabel={`View details for ${name}`}
                                 >
-                                    <TextContainer spacing="tight">
+                                    <TextContainer spacing='tight'>
                                         <DisplayText
-                                            variation="strong"
-                                            element="h4"
+                                            variation='strong'
+                                            element='h4'
                                         >
                                             {name}
                                         </DisplayText>
@@ -143,7 +149,7 @@ export class WorkList extends Component {
                                         />
                                     }
                                     <div
-                                        id="itemDeadline"
+                                        id='itemDeadline'
                                         style={{ float: 'right' }}
                                     >
                                         {moment(deadline).format(
